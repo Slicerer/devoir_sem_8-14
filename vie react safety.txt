@@ -1,0 +1,87 @@
+import { useState } from "react";
+import Froots from "./components/Froots";
+
+function App() {
+  //STATE
+  const [froots, setFroots] = useState([
+    { id: 1, nom: "pomette" },
+    { id: 2, nom: "bannane"},
+    { id: 3, nom: "pine Apple"},
+    { id: 4, nom: "anana"}
+  ]);
+
+const [nouveauFroot, setNewFroot] = useState("");   //rendu ici qui fit avec ligne 48 cest a dire place en value
+  // const inputRef = useRef();
+//bihavor
+
+const gestionDeSupresion = (id) => {
+  const newFroots = froots.filter((froot) => froot.id !== id);
+  setFroots(newFroots);
+};
+
+   const handleChange = (event) => {
+      setNewFroot(event.target.value);
+   };
+
+     const  handleSubmit = (event) => {
+      event.preventDefault();
+      // console.log(inputRef.current.value);
+      //state copy
+      const frootsCopy = [...froots];
+
+      //manipuler l'état
+      const id = new Date().getTime();
+      const nom = nouveauFroot;
+      const fruitAjouter = {id , nom };
+      frootsCopy.push(fruitAjouter);
+
+      //modifier le stater avec le setter
+      setFroots(frootsCopy);
+      setNewFroot(" ");
+   };
+  return (
+    <div>
+    <h1>liste de froots</h1>
+
+
+
+
+    <ul>
+      {froots.map((item) => (
+ 
+    <Froots fruitInfo = {item} supressionDesItems={gestionDeSupresion} />
+      ))}
+    </ul>
+
+
+    
+
+    <form action="submit" onSubmit={handleSubmit}>
+      <input value={nouveauFroot}  type="text" placeholder="Ajouter un fruit..."  //ligne 48
+      onChange={handleChange} />
+      <button>Ajouter</button>
+    </form>
+    </div>
+  );
+}
+export default App;
+
+
+---------------------------------
+
+export default function Froots(props) {
+
+   //state
+   const fruitInfo = props.fruitInfo;
+   const supressionDesItems = props.supressionDesItems;
+
+   //bihavor
+   //rerender 
+   return (
+     <li key={fruitInfo.id}>
+       {fruitInfo.nom}{" "}
+       <button onClick={() => supressionDesItems(fruitInfo.id)}>X</button>
+     </li>
+ );   
+}
+
